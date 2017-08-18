@@ -29,9 +29,7 @@
   "homepage": "https://github.com/helloproclub/k2d2-telegram-bot#readme",
   "dependencies": {
     "express": "^4.15.4",
-    "telebot": "^1.2.3"
-  },
-  "devDependencies": {
+    "telebot": "^1.2.3",
     "babel": "^6.23.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
