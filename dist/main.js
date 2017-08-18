@@ -17,7 +17,8 @@ app.set('port', process.env.PORT || 5000);
 
 app.get('/', function (req, res) {
   res.send('OK');
-  user.bot.run();
 }).listen(app.get('port'), function () {
   console.log('Bot is running, listening on port ', app.get('port'));
 });
+
+user.bot.run();
