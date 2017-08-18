@@ -9,12 +9,9 @@ class UserBot {
     if (typeof(token) == 'undefined' || token == '')
       throw new Error('Error: You need to provide the bot token!')
 
-    _.bot      = new TeleBot(token)
-    _.messages = new Messages()
-
-    _.parseOpts = {
-      parseMode: 'html'
-    }
+    _.bot       = new TeleBot(token)
+    _.messages  = new Messages()
+    _.parseOpts = {parseMode: 'html'}
   }
 
   run() {

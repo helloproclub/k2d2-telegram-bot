@@ -2,7 +2,11 @@
   "name": "k2d2-telegram-bot",
   "version": "0.1.0",
   "description": "A Telegram bot application for K2D2",
-  "main": "main.js",
+  "main": "dist/main.js",
+  "engines": {
+    "node": "8.4.0",
+    "npm": "5.3.0"
+  },
   "scripts": {
     "compile": "babel src -d dist",
     "app": "node dist/main.js",
@@ -24,6 +28,7 @@
   },
   "homepage": "https://github.com/helloproclub/k2d2-telegram-bot#readme",
   "dependencies": {
+    "express": "^4.15.4",
     "telebot": "^1.2.3"
   },
   "devDependencies": {

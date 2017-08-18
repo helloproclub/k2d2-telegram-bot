@@ -26,10 +26,7 @@ var UserBot = function () {
 
     _.bot = new _telebot2.default(_token.token);
     _.messages = new _messages2.default();
-
-    _.parseOpts = {
-      parseMode: 'html'
-    };
+    _.parseOpts = { parseMode: 'html' };
   }
 
   _createClass(UserBot, [{
