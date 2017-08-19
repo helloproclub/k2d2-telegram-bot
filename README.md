@@ -2,14 +2,15 @@
 A Telegram bot application for K2D2
 
 ## Requirements
-- node 8.4.0
-- npm 5.3.0
-- express 4.15.4
-- telebot 1.2.3
-- babel 6.23.0
-- babel-cli 6.26.0
-- babel-core 6.26.0
-- babel-preset-es2015 6.24.1
+- **node** 8.4.0
+- **npm** 5.3.0
+- **b24** 1.1.0
+- **express** 4.15.4
+- **telebot** 1.2.3
+- **babel** 6.23.0
+- **babel-cli** 6.26.0
+- **babel-core** 6.26.0
+- **babel-preset-es2015** 6.24.1
 
 ## Installation
 - Put your bot token in `src/user/token.js`.
@@ -41,6 +42,9 @@ The bot dependencies saved in `node_modules/` directory.
 - [x] Make sure that the bot would run properly
 - [x] Fix timeout problem with Express
 - [x] Add help command with specific topic
+- [x] Integrate bot with [b24](https://github.com/setyongr/b24) package
+- [x] Test the web hook feature from `b24` package
+- [x] Test an inbound web hook from Bitrix24 with `b24` package
 - [ ] Complete all needed commands
 - [ ] Process and save all needed data
 - [ ] Bind K2D2 Telegram Bot with Bitrix24 Open Channel Telegram integration
