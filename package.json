@@ -9,9 +9,10 @@
   },
   "scripts": {
     "clean": "rm -r dist/",
-    "compile": "npm run clean && mkdir dist && babel src -d dist",
+    "compile": "babel src -d dist",
+    "build": "npm run clean && mkdir dist && npm run compile",
     "app": "node dist/main.js",
-    "start": "npm run compile && npm run app",
+    "start": "npm run build && npm run app",
     "test": "mocha"
   },
   "repository": {
@@ -29,11 +30,12 @@
   },
   "homepage": "https://github.com/helloproclub/k2d2-telegram-bot#readme",
   "dependencies": {
-    "express": "^4.15.4",
-    "telebot": "^1.2.3",
+    "b24": "^1.1.0",
     "babel": "^6.23.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
-    "babel-preset-es2015": "^6.24.1"
+    "babel-preset-es2015": "^6.24.1",
+    "express": "^4.15.4",
+    "telebot": "^1.2.3"
   }
 }

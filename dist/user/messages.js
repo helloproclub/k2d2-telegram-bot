@@ -9,7 +9,7 @@ var UserMessages = function UserMessages() {
 
   _.welcome = 'Selamat datang di layanan <b>K2D2</b>!\n' + '\n' + 'Gunakan perintah /bantuan untuk menampilkan pesan bantuan.';
 
-  _.commands = 'Berikut ini adalah daftar perintah yang dapat Anda gunakan.\n' + '\n' + '/start - Memulai layanan K2D2\n' + '/bantuan - Menampilkan pesan bantuan\n' + '/bantuan <b>topik</b> - Menampilkan pesan bantuan mengenai topik ' + 'tertentu\n' + '/perintah - Menampilkan daftar perintah\n' + '/keluhan - Kirim keluhan Anda kepada kami\n' + '/selesai - Mengakhiri layanan K2D2';
+  _.commands = 'Berikut ini adalah daftar perintah yang dapat Anda gunakan.\n' + '\n' + '/start - Memulai layanan K2D2\n' + '/bantuan - Menampilkan pesan bantuan\n' + '/bantuan <b>topik</b> - Menampilkan pesan bantuan mengenai topik ' + 'tertentu\n' + '/perintah - Menampilkan daftar perintah\n' + '/keluhan - Mengirim keluhan Anda kepada kami\n' + '/selesai - Mengakhiri layanan K2D2';
 
   _.help = '<b>K2D2</b> adalah layanan ...\n' + '\n' + 'Gunakan /perintah untuk menampilkan perintah apa saja yang tersedia.';
 
@@ -25,6 +25,8 @@ var UserMessages = function UserMessages() {
   };
 
   _.unknow = 'Kami tidak mengerti.\n' + 'Gunakan perintah /bantuan untuk menampilkan pesan bantuan.';
+
+  _.saveError = 'Kami tidak dapat menyimpannya.\n' + 'Sepertinya terjadi kesalahan pada <i>server</i> kami.\n' + 'Cobalah untuk mengirim ulang setelah beberapa saat.';
 
   _.askGripe = 'Silakan tulis dan kirim keluhan Anda.';
 

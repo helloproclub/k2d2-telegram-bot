@@ -15,7 +15,7 @@ class UserMessages {
       + '/bantuan <b>topik</b> - Menampilkan pesan bantuan mengenai topik '
         + 'tertentu\n'
       + '/perintah - Menampilkan daftar perintah\n'
-      + '/keluhan - Kirim keluhan Anda kepada kami\n'
+      + '/keluhan - Mengirim keluhan Anda kepada kami\n'
       + '/selesai - Mengakhiri layanan K2D2'
 
     _.help
@@ -42,6 +42,11 @@ class UserMessages {
     _.unknow
       = 'Kami tidak mengerti.\n'
       + 'Gunakan perintah /bantuan untuk menampilkan pesan bantuan.'
+
+    _.saveError
+      = 'Kami tidak dapat menyimpannya.\n'
+      + 'Sepertinya terjadi kesalahan pada <i>server</i> kami.\n'
+      + 'Cobalah untuk mengirim ulang setelah beberapa saat.'
 
     _.askGripe
       = 'Silakan tulis dan kirim keluhan Anda.'

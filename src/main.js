@@ -2,7 +2,7 @@ import User    from './user.js'
 import Express from 'express'
 
 const app  = new Express()
-const user = new User()
+    , user = new User()
 
 user.bot.run()
 

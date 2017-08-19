@@ -1,6 +1,7 @@
 import TeleBot  from 'telebot'
 import {token}  from './token.js'
 import Messages from './messages.js'
+import WebHook  from '../bitrix24/webhook.js'
 
 class UserBot {
   constructor() {
@@ -13,6 +14,7 @@ class UserBot {
       , prompted  = false
 
     const bot       = new TeleBot(token)
+        , webhook   = new WebHook()
         , messages  = new Messages()
         , parseHTML = {parseMode: 'html'}
 
@@ -49,7 +51,13 @@ class UserBot {
                 command   = ''
                 prompted  = false
 
-                return msg.reply.text(messages.savedGripe)
+                webhook.trigger('profile').then((data) => {
+                  if (data == {})
+                    return bot.sendMessage(id, messages.saveError, parseHTML)
+                  else
+                    return msg.reply.text(messages.savedGripe)
+                })
+                break
               default:
                 return bot.sendMessage(
                   id
