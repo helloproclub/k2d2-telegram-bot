@@ -40,6 +40,7 @@ The bot dependencies saved in `node_modules/` directory.
 - [x] Build a directory structure for K2D2 Telegram Bot application
 - [x] Make sure that the bot would run properly
 - [x] Fix timeout problem with Express
+- [x] Add help command with specific topic
 - [ ] Complete all needed commands
 - [ ] Process and save all needed data
 - [ ] Bind K2D2 Telegram Bot with Bitrix24 Open Channel Telegram integration

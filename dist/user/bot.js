@@ -20,33 +20,56 @@ var UserBot = function () {
   function UserBot() {
     _classCallCheck(this, UserBot);
 
-    var _ = this;
-
     if (typeof _token.token == 'undefined' || _token.token == '') throw new Error('Error: You need to provide the bot token!');
-
-    _.bot = new _telebot2.default(_token.token);
-    _.messages = new _messages2.default();
-    _.parseOpts = { parseMode: 'html' };
   }
 
   _createClass(UserBot, [{
     key: 'run',
     value: function run() {
-      var _ = this;
+      var command = '',
+          prompted = false;
 
-      _.bot.on('/start', function (msg) {
-        return _.bot.sendMessage(msg.from.id, _.messages.welcome, _.parseOpts);
+      var bot = new _telebot2.default(_token.token),
+          messages = new _messages2.default(),
+          parseHTML = { parseMode: 'html' };
+
+      bot.on('*', function (msg) {
+        var id = msg.from.id,
+            txt = msg.text,
+            spr = txt.split(' '),
+            cmd = spr[0],
+            arg = spr.slice(1);
+
+        switch (cmd) {
+          case '/start':
+            return bot.sendMessage(id, messages.welcome, parseHTML);
+          case '/bantuan':
+            var topic = arg[0];
+
+            if (typeof topic != 'undefined') return bot.sendMessage(id, messages.helpTopic(topic), parseHTML);else return bot.sendMessage(id, messages.help, parseHTML);
+          case '/perintah':
+            return bot.sendMessage(id, messages.commands, parseHTML);
+          case '/keluhan':
+            command = txt;
+            prompted = true;
+
+            return msg.reply.text(messages.askGripe);
+          default:
+            if (prompted) {
+              switch (command) {
+                case '/keluhan':
+                  command = '';
+                  prompted = false;
+
+                  return msg.reply.text(messages.savedGripe);
+                default:
+                  return bot.sendMessage(id, messages.unknownCommand(command), parseHTML);
+              }
+            } else return msg.reply.text(messages.unknow);
+        }
       });
 
-      _.bot.on('/bantuan', function (msg) {
-        return _.bot.sendMessage(msg.from.id, _.messages.help, _.parseOpts);
-      });
-
-      _.bot.on('/perintah', function (msg) {
-        return _.bot.sendMessage(msg.from.id, _.messages.commands, _.parseOpts);
-      });
-
-      _.bot.start();
+      bot.start();
     }
   }]);
 

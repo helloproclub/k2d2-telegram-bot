@@ -4,6 +4,8 @@ import Express from 'express'
 const app  = new Express()
 const user = new User()
 
+user.bot.run()
+
 app.set('port', (process.env.PORT || 5000))
 
 app.get('/', (req, res) => {
@@ -12,5 +14,3 @@ app.get('/', (req, res) => {
   .listen(app.get('port'), () => {
     console.log('Bot is running, listening on port ', app.get('port'))
   })
-
-user.bot.run()

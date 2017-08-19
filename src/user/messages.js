@@ -12,15 +12,46 @@ class UserMessages {
       + '\n'
       + '/start - Memulai layanan K2D2\n'
       + '/bantuan - Menampilkan pesan bantuan\n'
-      + '/bantuan &lt;topik&gt; - Menampilkan pesan bantuan mengenai topik '
+      + '/bantuan <b>topik</b> - Menampilkan pesan bantuan mengenai topik '
         + 'tertentu\n'
       + '/perintah - Menampilkan daftar perintah\n'
+      + '/keluhan - Kirim keluhan Anda kepada kami\n'
       + '/selesai - Mengakhiri layanan K2D2'
 
     _.help
       = '<b>K2D2</b> adalah layanan ...\n'
       + '\n'
-      + _.commands
+      + 'Gunakan /perintah untuk menampilkan perintah apa saja yang tersedia.'
+
+    _.helpTopic
+      = (topic) =>
+      {
+        switch (topic) {
+          case '/perintah':
+            return '/perintah merupakan sebuah perintah yang digunakan untuk '
+                 + 'menampilkan perintah apa saja yang tersedia.'
+          case '/keluhan':
+            return 'Setelah Anda menjalankan perintah /keluhan, kami akan '
+                 + 'meminta Anda menulis semua keluhan dan mengirimkannya '
+                 + 'kembali.'
+          default:
+            return 'Topik yang diminta tidak ada.'
+        }
+      }
+
+    _.unknow
+      = 'Kami tidak mengerti.\n'
+      + 'Gunakan perintah /bantuan untuk menampilkan pesan bantuan.'
+
+    _.askGripe
+      = 'Silakan tulis dan kirim keluhan Anda.'
+
+    _.savedGripe
+      = 'Keluhan Anda sudah kami terima.'
+
+    _.unknownCommand
+      = (cmd) =>
+        `Perintah <b>${cmd}</b> tidak dikenali...`
   }
 }
 

@@ -4,32 +4,65 @@ import Messages from './messages.js'
 
 class UserBot {
   constructor() {
-    var _ = this
-
     if (typeof(token) == 'undefined' || token == '')
       throw new Error('Error: You need to provide the bot token!')
-
-    _.bot       = new TeleBot(token)
-    _.messages  = new Messages()
-    _.parseOpts = {parseMode: 'html'}
   }
 
   run() {
-    var _ = this
+    let command   = ''
+      , prompted  = false
 
-    _.bot.on('/start', (msg) =>
-        _.bot.sendMessage(msg.from.id, _.messages.welcome, _.parseOpts)
-      )
+    const bot       = new TeleBot(token)
+        , messages  = new Messages()
+        , parseHTML = {parseMode: 'html'}
 
-    _.bot.on('/bantuan', (msg) =>
-        _.bot.sendMessage(msg.from.id, _.messages.help, _.parseOpts)
-      )
+    bot.on('*', (msg) => {
+      const id  = msg.from.id
+          , txt = msg.text
+          , spr = txt.split(' ')
+          , cmd = spr[0]
+          , arg = spr.slice(1)
 
-    _.bot.on('/perintah', (msg) =>
-        _.bot.sendMessage(msg.from.id, _.messages.commands, _.parseOpts)
-      )
+      switch (cmd) {
+        case '/start':
+          return bot.sendMessage(id, messages.welcome, parseHTML)
+        case '/bantuan':
+          const topic = arg[0]
 
-    _.bot.start()
+          if (typeof(topic) != 'undefined')
+            return bot.sendMessage(id, messages.helpTopic(topic), parseHTML)
+          else
+            return bot.sendMessage(id, messages.help, parseHTML)
+        case '/perintah':
+          return bot.sendMessage(id, messages.commands, parseHTML)
+        case '/keluhan':
+          command  = txt
+          prompted = true
+
+          return msg.reply.text(messages.askGripe)
+        default:
+          if (prompted)
+          {
+            switch (command)
+            {
+              case '/keluhan':
+                command   = ''
+                prompted  = false
+
+                return msg.reply.text(messages.savedGripe)
+              default:
+                return bot.sendMessage(
+                  id
+                , messages.unknownCommand(command)
+                , parseHTML
+                )
+            }
+          }
+          else return msg.reply.text(messages.unknow)
+      }
+    })
+
+    bot.start()
   }
 }
 
