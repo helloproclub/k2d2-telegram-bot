@@ -9,7 +9,7 @@
   },
   "scripts": {
     "clean": "rm -r dist/",
-    "compile": "npm run clean && babel src -d dist",
+    "compile": "npm run clean && mkdir dist && babel src -d dist",
     "app": "node dist/main.js",
     "start": "npm run compile && npm run app",
     "test": "mocha"
