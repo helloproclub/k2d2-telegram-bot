@@ -26,8 +26,7 @@ class Bitrix24WebHook {
       }
       catch (err)
       {
-        console.log(err)
-        return {}
+        return err.error
       }
     }
   }

@@ -9,9 +9,9 @@ var Bitrix24WebHook = function Bitrix24WebHook() {
 
   var _ = this;
 
-  _.url = 'k2d2';
-  _.user = '8';
-  _.token = 'lr3zedw9d6kvx233';
+  _.url = ''; // HOST
+  _.user = ''; // USER
+  _.token = ''; // TOKEN
   _.config = {
     config: {
       mode: 'webhook',
@@ -30,8 +30,7 @@ var Bitrix24WebHook = function Bitrix24WebHook() {
 
       return res;
     } catch (err) {
-      console.log(err);
-      return {};
+      return err.error;
     }
   };
 };

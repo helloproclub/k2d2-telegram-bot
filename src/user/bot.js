@@ -5,43 +5,143 @@ import WebHook  from '../bitrix24/webhook.js'
 
 class UserBot {
   constructor() {
+    let _ = this
+
     if (typeof(token) == 'undefined' || token == '')
       throw new Error('Error: You need to provide the bot token!')
+
+    _.bot       = new TeleBot(token)
+    _.webhook   = new WebHook()
+    _.messages  = new Messages()
+    _.parseHTML = {parseMode: 'html'}
+  }
+
+  async getCRMLead(id) {
+    return this.webhook.trigger('crm.lead.get', {title: id})
+  }
+
+  async addCRMLead(params) {
+    return this.webhook.trigger('crm.lead.add', params)
+  }
+
+  async getCRMContact(id) {
+    return this.webhook.trigger(
+      'crm.contact.get', {web: `https://telegram.me/${id}`}
+    )
+  }
+
+  async addCRMContact(params) {
+    return this.webhook.trigger('crm.contact.add', params)
+  }
+
+  saveGripe(msg) {
+    const id      = msg.id
+        , name    = {first: msg.from.first_name, last: msg.from.last_name}
+        , uname   = msg.from.username
+
+    let _ = this
+
+    _.getCRMLead(`T:${id}`)
+    .then(data => {
+      const result = data.result
+      if (typeof(result) == 'undefined')
+      {
+        const params = {
+          name: name.first
+        , last_name: name.last
+        , opened: 'Y'
+        , status_id: 'NEW'
+        , status_description: msg.text
+        }
+
+        _.addCRMLead(params)
+        .then(data => {
+          const result = data.result
+          if (typeof(result) == 'undefined')
+            return _.bot.sendMessage(id, _.messages.saveError, _.parseHTML)
+          else
+            return msg.reply.text(_.messages.savedGripe)
+        })
+        .catch(err => {
+          console.log(err)
+          return msg.reply.text(_.messages.internalError)
+        })
+      }
+      else
+      {
+        return msg.reply.text('PASSB!')
+      }
+    })
+    .catch(err => {
+      console.log(err)
+      return msg.reply.text(_.messages.internalError)
+    })
   }
 
   run() {
-    let command   = ''
+    let _         = this
+      , command   = ''
       , prompted  = false
 
-    const bot       = new TeleBot(token)
-        , webhook   = new WebHook()
-        , messages  = new Messages()
-        , parseHTML = {parseMode: 'html'}
+    _.bot.on('*', (msg) => {
+      const id    = msg.from.id
+          , name  = {first: msg.from.first_name, last: msg.from.last_name}
+          , uname = msg.from.username
+          , txt   = msg.text
+          , spr   = txt.split(' ')
+          , cmd   = spr[0]
+          , arg   = spr.slice(1)
 
-    bot.on('*', (msg) => {
-      const id  = msg.from.id
-          , txt = msg.text
-          , spr = txt.split(' ')
-          , cmd = spr[0]
-          , arg = spr.slice(1)
+      console.log(msg)
 
       switch (cmd) {
         case '/start':
-          return bot.sendMessage(id, messages.welcome, parseHTML)
+          _.getCRMContact(uname)
+          .then(data => {
+            const result = data.result
+            if (typeof(result) == 'undefined')
+            {
+              const params = {
+                'fields[IM]': 'Telegram'
+              , 'fields[WEB]': `https://telegram.me/${uname}`
+              , 'fields[NAME]': name.first
+              , 'fields[SECOND_NAME]': ''
+              , 'fields[LAST_NAME]': name.last
+              , 'fields[TYPE_ID]': 'Clients'
+              , 'fields[SOURCE_ID]': `User: T-${id}`
+              }
+
+              _.addCRMContact(params)
+              .then(data => console.log(data))
+              .catch(err => console.log(err))
+            }
+            else
+            {
+
+            }
+          })
+          .catch(err => console.log(err))
+
+          return _.bot.sendMessage(id, _.messages.welcome, _.parseHTML)
+          break
         case '/bantuan':
           const topic = arg[0]
 
           if (typeof(topic) != 'undefined')
-            return bot.sendMessage(id, messages.helpTopic(topic), parseHTML)
+            return _.bot.sendMessage(id, _.messages.helpTopic(topic), _.parseHTML)
           else
-            return bot.sendMessage(id, messages.help, parseHTML)
+            return _.bot.sendMessage(id, _.messages.help, _.parseHTML)
+
+          break
         case '/perintah':
-          return bot.sendMessage(id, messages.commands, parseHTML)
+          return _.bot.sendMessage(id, _.messages.commands, _.parseHTML)
+          break
         case '/keluhan':
           command  = txt
           prompted = true
 
-          return msg.reply.text(messages.askGripe)
+          return msg.reply.text(_.messages.askGripe)
+          break
         default:
           if (prompted)
           {
@@ -51,26 +151,22 @@ class UserBot {
                 command   = ''
                 prompted  = false
 
-                webhook.trigger('profile').then((data) => {
-                  if (data == {})
-                    return bot.sendMessage(id, messages.saveError, parseHTML)
-                  else
-                    return msg.reply.text(messages.savedGripe)
-                })
+                _.saveGripe(msg)
+
                 break
               default:
-                return bot.sendMessage(
+                return _.bot.sendMessage(
                   id
-                , messages.unknownCommand(command)
-                , parseHTML
+                , _.messages.unknownCommand(command)
+                , _.parseHTML
                 )
             }
           }
-          else return msg.reply.text(messages.unknow)
+          else return msg.reply.text(_.messages.unknow)
       }
     })
 
-    bot.start()
+    _.bot.start()
   }
 }
 

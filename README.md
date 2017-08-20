@@ -14,6 +14,7 @@ A Telegram bot application for K2D2
 
 ## Installation
 - Put your bot token in `src/user/token.js`.
+- Put your Bitrix24 web hook credentials in `src/bitrix24/webhook.js`.
 - Run `npm install`.
 - Run `npm start`.
 

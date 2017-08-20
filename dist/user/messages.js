@@ -35,6 +35,8 @@ var UserMessages = function UserMessages() {
   _.unknownCommand = function (cmd) {
     return 'Perintah <b>' + cmd + '</b> tidak dikenali...';
   };
+
+  _.internalError = 'Ups! Terjadi kesalahan internal pada server.\n' + 'Kami tidak dapat mengambil data dari server.\n' + 'Cobalah untuk mengirim ulang setelah beberapa saat atau laporkan ' + 'masalah ini kepada administrator kami.';
 };
 
 module.exports = UserMessages;
