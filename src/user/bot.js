@@ -84,16 +84,19 @@ class UserBot {
       , prompted  = false
 
     _.bot.on('*', (msg) => {
-      const id    = msg.from.id
+      const id  = msg.from.id
           , name  = {first: msg.from.first_name, last: msg.from.last_name}
           , uname = msg.from.username
-          , txt   = msg.text
-          , spr   = txt.split(' ')
-          , cmd   = spr[0]
-          , arg   = spr.slice(1)
-
-      console.log(msg)
-
+      if (typeof(msg.txt) == 'undefined') {
+        if (typeof(msg.location) != 'undefined') {
+          const listDesa = this.getDesaFromQuery(msg.location);
+          return _.bot.sendMessage(id, _.messages.showListDesa(listDesa), _.parseHTML)
+        }
+      }
+      const txt = msg.text
+          , spr = txt.split(' ')
+          , cmd = spr[0]
+          , arg = spr.slice(1)
       switch (cmd) {
         case '/start':
           _.getCRMContact(uname)
@@ -167,6 +170,36 @@ class UserBot {
     })
 
     _.bot.start()
+  }
+
+  getDesaFromQuery(location) {
+    const
+        query =  `
+          SELECT ?desa ?desaLabel ?lat ?long ?kodeDesa WHERE {
+            ?desa p:P625 ?statement . # coordinate-location statement
+            ?desa wdt:P1588 ?kodeDesa .
+            ?statement psv:P625 ?coordinate_node .
+            ?coordinate_node wikibase:geoLatitude ?lat .
+            ?coordinate_node wikibase:geoLongitude ?long .
+          
+            FILTER (ABS(?lat - `
+          + location.latitude
+          + `) < 0.1)
+            FILTER (ABS(?long - `
+          + location.longitude
+          + `) < 0.1)
+          
+            SERVICE wikibase:label {
+              bd:serviceParam wikibase:language "en" .
+            }
+          } ORDER BY ASC(?lat)
+        `
+        , wdk = require('wikidata-sdk')
+        , url = wdk.sparqlQuery(query)
+        , req = require('sync-request')
+        , tmp = req('GET', url)
+        , res = JSON.parse(tmp.getBody('utf8'));
+    return res;
   }
 }
 

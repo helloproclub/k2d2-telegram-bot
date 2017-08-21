@@ -11,6 +11,8 @@ A Telegram bot application for K2D2
 - **babel-cli** 6.26.0
 - **babel-core** 6.26.0
 - **babel-preset-es2015** 6.24.1
+- **sync-request** 4.1.0
+- **wikidata** 5.2.2
 
 ## Installation
 - Put your bot token in `src/user/token.js`.
