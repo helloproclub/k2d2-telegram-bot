@@ -39,6 +39,17 @@ class UserMessages {
         }
       }
 
+    _.showListDesa
+      = (data) =>
+      {
+        var ret = 'Desa Terdekat\n\n';
+        const listDesa = data.results.bindings;
+        listDesa.forEach(function (desa) {
+          ret += desa.kodeDesa.value + ' - ' + desa.desaLabel.value + '\n';
+        });
+        return ret;
+      }
+
     _.unknow
       = 'Kami tidak mengerti.\n'
       + 'Gunakan perintah /bantuan untuk menampilkan pesan bantuan.'

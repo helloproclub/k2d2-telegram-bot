@@ -24,6 +24,15 @@ var UserMessages = function UserMessages() {
     }
   };
 
+  _.showListDesa = function (data) {
+    var ret = 'Desa Terdekat\n\n';
+    var listDesa = data.results.bindings;
+    listDesa.forEach(function (desa) {
+      ret += desa.kodeDesa.value + ' - ' + desa.desaLabel.value + '\n';
+    });
+    return ret;
+  };
+
   _.unknow = 'Kami tidak mengerti.\n' + 'Gunakan perintah /bantuan untuk menampilkan pesan bantuan.';
 
   _.saveError = 'Kami tidak dapat menyimpannya.\n' + 'Sepertinya terjadi kesalahan pada <i>server</i> kami.\n' + 'Cobalah untuk mengirim ulang setelah beberapa saat.';

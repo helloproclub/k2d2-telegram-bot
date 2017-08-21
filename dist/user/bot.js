@@ -92,6 +92,8 @@ var UserBot = function () {
   }, {
     key: 'run',
     value: function run() {
+      var _this = this;
+
       var _ = this,
           command = '',
           prompted = false;
@@ -99,14 +101,17 @@ var UserBot = function () {
       _.bot.on('*', function (msg) {
         var id = msg.from.id,
             name = { first: msg.from.first_name, last: msg.from.last_name },
-            uname = msg.from.username,
-            txt = msg.text,
+            uname = msg.from.username;
+        if (typeof msg.txt == 'undefined') {
+          if (typeof msg.location != 'undefined') {
+            var listDesa = _this.getDesaFromQuery(msg.location);
+            return _.bot.sendMessage(id, _.messages.showListDesa(listDesa), _.parseHTML);
+          }
+        }
+        var txt = msg.text,
             spr = txt.split(' '),
             cmd = spr[0],
             arg = spr.slice(1);
-
-        console.log(msg);
-
         switch (cmd) {
           case '/start':
             _.getCRMContact(uname).then(function (data) {
@@ -167,6 +172,17 @@ var UserBot = function () {
       });
 
       _.bot.start();
+    }
+  }, {
+    key: 'getDesaFromQuery',
+    value: function getDesaFromQuery(location) {
+      var query = '\n          SELECT ?desa ?desaLabel ?lat ?long ?kodeDesa WHERE {\n            ?desa p:P625 ?statement . # coordinate-location statement\n            ?desa wdt:P1588 ?kodeDesa .\n            ?statement psv:P625 ?coordinate_node .\n            ?coordinate_node wikibase:geoLatitude ?lat .\n            ?coordinate_node wikibase:geoLongitude ?long .\n          \n            FILTER (ABS(?lat - ' + location.latitude + ') < 0.1)\n            FILTER (ABS(?long - ' + location.longitude + ') < 0.1)\n          \n            SERVICE wikibase:label {\n              bd:serviceParam wikibase:language "en" .\n            }\n          } ORDER BY ASC(?lat)\n        ',
+          wdk = require('wikidata-sdk'),
+          url = wdk.sparqlQuery(query),
+          req = require('sync-request'),
+          tmp = req('GET', url),
+          res = JSON.parse(tmp.getBody('utf8'));
+      return res;
     }
   }]);
 
